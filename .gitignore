@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -137,3 +138,38 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+=======
+# Dependency directories
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment variables (CRITICAL)
+.env
+backend/.env
+frontend/.env
+*.local
+
+# Build outputs
+dist/
+backend/dist/
+frontend/dist/
+
+# Database
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# Logs & Error files
+*.log
+backend/*.txt
+npm-debug.log*
+
+# Editor files
+.vscode/
+.idea/
+.DS_Store
+
+# OS files
+Thumbs.db
+Desktop.ini
+>>>>>>> 79f0fab (Initial commit: EcoTide Blue Carbon Platform setup with PayPal integration and MRV system)

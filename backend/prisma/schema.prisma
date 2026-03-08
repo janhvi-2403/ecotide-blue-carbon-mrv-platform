@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  UPLOADER
+  ADMIN
+  BUYER
+}
+
+enum ProjectStatus {
+  DRAFT
+  SUBMITTED
+  REVISION_REQUESTED
+  APPROVED
+  REJECTED
+}
+
+enum ReportStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REVISION_REQUESTED
+}
+
+model User {
+  id           String          @id @default(uuid())
+  email        String          @unique
+  passwordHash String
+  name         String
+  role         Role
+  isActive     Boolean         @default(true) // Active or deactivated
+  projects     Project[]       @relation("UserProjects")
+  transactions Transaction[]   @relation("BuyerTransactions")
+  evidence     Evidence[]      @relation("UserEvidence")
+  reports      Report[]        @relation("UserReports")
+  auditLogs    AuditLog[]      @relation("AdminAuditLogs")
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model Project {
+  id            String          @id @default(uuid())
+  name          String
+  location      String
+  area          Float           // In hectares
+  latitude      Float?
+  longitude     Float?
+  species       String
+  startDate     DateTime
+  description   String
+  status        ProjectStatus   @default(DRAFT)
+  revisionNotes String?         @map("revision_notes")
+  uploaderId    String
+  uploader      User            @relation("UserProjects", fields: [uploaderId], references: [id])
+  evidence      Evidence[]
+  reports       Report[]
+  carbonCredits CarbonCredit[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Evidence {
+  id          String   @id @default(uuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  uploaderId  String
+  uploader    User     @relation("UserEvidence", fields: [uploaderId], references: [id])
+  fileName    String
+  fileType    String
+  fileUrl     String
+  ipfsCid     String?
+  latitude    Float?
+  longitude   Float?
+  hashValue   String   // SHA256
+  uploadedAt  DateTime @default(now())
+}
+
+model Report {
+  id             String       @id @default(uuid())
+  projectId      String
+  project        Project      @relation(fields: [projectId], references: [id])
+  uploaderId     String
+  uploader       User         @relation("UserReports", fields: [uploaderId], references: [id])
+  fileUrl        String
+  status         ReportStatus @default(PENDING)
+  revisionNotes  String?      @map("revision_notes")
+  hash           String       @unique // SHA256 of the report file/data
+  
+  // MRV Specific Fields
+  uploaderRole   String?      // NGO, community, panchayat
+  plantsCount    Int?
+  expectedCarbon Float?
+  latitude       Float?
+  longitude      Float?
+  treeHeight     Float?
+  density        Float?
+  siteConditions String?
+  
+  onChainTxId    String?      // Algorand transaction ID storing the hash
+  adminRemarks   String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model CarbonCredit {
+  id              String        @id @default(uuid())
+  projectId       String
+  project         Project       @relation(fields: [projectId], references: [id])
+  tokenAssetId    String?       // Algorand Standard Asset ID
+  amountTotal     Float
+  amountAvailable Float
+  pricePerCredit  Float         @default(15.0) // Mock default price in USD
+  transactions    Transaction[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Transaction {
+  id              String        @id @default(uuid())
+  buyerId         String
+  buyer           User          @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  creditId        String
+  credit          CarbonCredit  @relation(fields: [creditId], references: [id])
+  amount          Float         // Amount of credits bought
+  paymentMethod   String        @default("MOCK") // "RAZORPAY", "PERA_WALLET", "MOCK"
+  fiatAmount      Float?        // e.g. amount in INR/USD
+  cryptoAmount    Float?        // e.g. amount in ALGO/USDC
+  txHash          String?       // Algorand Transfer Tx Hash if applicable
+  createdAt       DateTime      @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  admin       User     @relation("AdminAuditLogs", fields: [adminId], references: [id])
+  actionType  String   // 'USER_DEACTIVATED', 'REPORT_VERIFIED', 'PROJECT_REJECTED', 'CREDITS_MINTED'
+  targetId    String   // ID of the user, report, or project targeted
+  details     String?  // JSON string or text explaining the action
+  createdAt   DateTime @default(now())
+}
