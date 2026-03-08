@@ -41,16 +41,6 @@ export const register = async (req: Request, res: Response) => {
             token,
             user: { id: user.id, email: user.email, name: user.name, role: user.role }
         });
-
-        // Background Audit Log (Don't await to keep response fast)
-        prisma.auditLog.create({
-            data: {
-                adminId: user.id, // In this case, it's a self-log or we'd need a system admin ID
-                actionType: 'USER_REGISTERED',
-                targetId: user.id,
-                details: `New ${user.role} registered: ${user.email}`
-            }
-        }).catch(err => console.error("Failed to log registration", err));
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ error: 'Internal server error' });
