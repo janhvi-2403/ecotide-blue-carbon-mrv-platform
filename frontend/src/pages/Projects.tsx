@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../utils/api';
-import { Plus, Edit2, Trash2, MapPin, Trees, Calendar, FileText, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Edit2, Trash2, MapPin } from 'lucide-react';
 
 interface Project {
     id: string;

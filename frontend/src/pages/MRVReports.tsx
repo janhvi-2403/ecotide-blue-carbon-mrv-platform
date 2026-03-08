@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { useAuthStore } from '../stores/authStore';
-import { UploadCloud, File, AlertCircle, Database, MapPin, Trees, ChevronRight } from 'lucide-react';
+import { UploadCloud, AlertCircle, MapPin, Trees, ChevronRight } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -40,7 +39,6 @@ function MapCenterer({ position }: { position: L.LatLng | null }) {
 }
 
 export const MRVReports = () => {
-    const { user } = useAuthStore();
     const [projects, setProjects] = useState<any[]>([]);
     const [reports, setReports] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -80,7 +78,7 @@ export const MRVReports = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => setMapPosition(new L.LatLng(pos.coords.latitude, pos.coords.longitude)),
-                (err) => console.log('Geolocation not available/denied')
+                (_err) => console.log('Geolocation not available/denied')
             );
         }
     }, []);
@@ -319,8 +317,8 @@ export const MRVReports = () => {
                                         <div className="flex justify-between items-start mb-2">
                                             <div className="font-medium text-sm text-white">{r.project?.name || 'Unknown Project'}</div>
                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400' :
-                                                    r.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400' :
-                                                        'bg-red-500/10 text-red-400'
+                                                r.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400' :
+                                                    'bg-red-500/10 text-red-400'
                                                 }`}>
                                                 {r.status}
                                             </span>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import {
     Users, Activity, FolderOpen, ShieldCheck, Download,
-    Leaf, Settings, CheckCircle, XCircle, Search, Map as MapIcon, Database, ExternalLink, FileText, ClipboardCheck, ArrowRight
+    Leaf, Settings, CheckCircle, XCircle, Search, Database, ExternalLink, FileText, ClipboardCheck
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';

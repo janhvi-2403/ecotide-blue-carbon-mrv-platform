@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import api from '../utils/api';
 import { CheckCircle, Clock, XCircle, Leaf, TrendingUp } from 'lucide-react';

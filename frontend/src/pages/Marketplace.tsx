@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Store, ShoppingCart, Leaf, MapPin, CheckCircle, AlertCircle, Briefcase, Award, Building, CreditCard, Wallet, Activity } from 'lucide-react';
+import { Store, ShoppingCart, Leaf, MapPin, CheckCircle, AlertCircle, Briefcase, Award, Building, Wallet, Activity } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { format } from 'date-fns';
 import { PeraWalletConnect } from '@perawallet/connect';
