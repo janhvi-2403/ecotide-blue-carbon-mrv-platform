@@ -1,8 +1,17 @@
+
+
 <<<<<<< HEAD
 # ecotide-blue-carbon-mrv-platform
 EcoTide is a decentralized platform designed to streamline the lifecycle of Blue Carbon credits. It connects coastal restoration workers with corporate buyers through a transparent, high-integrity MRV (Measurement, Reporting, and Verification) system.
 =======
 # EcoTide: Blockchain-Powered Blue Carbon Marketplace 🌊
+
+
+## Live Demo
+Check the live version here: [EcoTide Demo](https://ecotide-blue-carbon-mrv-registry.onrender.com)
+
+
+
 
 **EcoTide** is a decentralized platform designed to streamline the lifecycle of Blue Carbon credits. It connects coastal restoration workers with corporate buyers through a transparent, high-integrity MRV (Measurement, Reporting, and Verification) system.
 
